@@ -117,31 +117,31 @@ function changeCoordinate(
 }
 
 /**
- * Clean a single color coordinate. 
- * 
- * The purpose of this function is to transform any coordinate that is part of a color 
+ * Clean a single color coordinate.
+ *
+ * The purpose of this function is to transform any coordinate that is part of a color
  * to a proper float number in the expected range.
- * 
- * By default, it uses 0 as the $min value and 100 as the $max value, so if you call 
- * the function with '150' or 150 the result will be (float) 100, and if you call the 
- * function with '-150' or -150 the result will be (float) 0. You can define both 
+ *
+ * By default, it uses 0 as the $min value and 100 as the $max value, so if you call
+ * the function with '150' or 150 the result will be (float) 100, and if you call the
+ * function with '-150' or -150 the result will be (float) 0. You can define both
  * $min and $max to null if you want an unbounded result.
- * 
- * Percentages are automatically converted using $max value. For example, if you call 
+ *
+ * Percentages are automatically converted using $max value. For example, if you call
  * the function with $max=255 and with a $value of '50%' the result will be (float) 127.5.
- * 
- * If you set $round to true, the value will be rounded with $precision decimals. The 
+ *
+ * If you set $round to true, the value will be rounded with $precision decimals. The
  * $precision can not exceed \ini_get('precision'), and will be considered as 0 by default.
  *
  * @param \Stringable|string|integer|float $value     The stringable or number to clean
- * @param integer                          $min       Minimum allowed value (can be null to unbound)
- * @param integer                          $max       Maximum allowed value (can be null to unbound)
- * @param boolean                          $loop      
+ * @param float|null                       $min       Minimum allowed value (can be null to unbound)
+ * @param float|null                       $max       Maximum allowed value (can be null to unbound)
+ * @param boolean                          $loop
  * @param integer|null                     $precision Used to round the value
  * @param boolean                          $round     If true the value will be rounded
  * @param \Stringable|string|null          $padLeft
  * @param integer|null                     $length
- * 
+ *
  * @return float
  */
 function cleanCoordinate(
@@ -152,7 +152,7 @@ function cleanCoordinate(
     int|null                     $precision = null,
     bool                         $round     = false,
     \Stringable|string|null      $padLeft   = null,
-    int                          $length    = null,
+    int|null                     $length    = null,
 ) :float {
     if (isStringable($value)) {
         $value = addLeadingZero((string) $value);
@@ -256,19 +256,20 @@ function constant(
  * 
  * If $value is 'f' and $length is 2, the result will be 'ff'.
  *
- * @param  \Stringable|string $value     The hexadecimal string to clean
- * @param  integer            $length    The minimum length expected
- * @param  boolean|null       $uppercase If true $value will be converted to uppercase, 
- *                                       if false $value will be converted to lowercase,
- *                                       if null the case remains unchanged
+ * @param  \Stringable|string $value         The hexadecimal string to clean
+ * @param  integer            $length        The minimum length expected
+ * @param  boolean|null       $uppercase     If true $value will be converted to uppercase,
+ *                                           if false $value will be converted to lowercase,
+ *                                           if null the case remains unchanged
+ * @param \Stringable|string|null $prefix    The string to use as a prefix when padding $value to reach $length characters. If null, $value will be used as a prefix.
  * 
  * @return string                        The cleaned hexadecimal $value
  */
 function cleanHexValue(
-    \Stringable|string $value,
-    int                $length    = 2,
-    bool|null          $uppercase = null,
-    \Stringable|string $prefix    = null,
+    \Stringable|string      $value,
+    int                     $length    = 2,
+    bool|null               $uppercase = null,
+    \Stringable|string|null $prefix    = null,
 ) :string {
     $value  = (string) $value;
     $prefix = (string) ($prefix ?? $value);
@@ -857,11 +858,11 @@ function toIterable(
 }
 
 /**
- * Converts any color value to the specified $to color space. 
+ * Converts any color value to the specified $to color space.
  * This function is notably called directly by the to() function.
- * 
+ *
  * If $from is null, it will use the $to same color space than the $to parameter.
- * 
+ *
  * If the conversion succeeds, it always returns an array of values, like [ 255,0,0,255 ] or [ 'FF','00','00','FF' ].
  * In case of errors, it will throw exceptions, except if $throw if set to false (or if $throw is null and $fallback is not null).
  *
@@ -870,15 +871,15 @@ function toIterable(
  * @param  ColorSpace|null $from
  * @param  array|null      $fallback
  * @param  boolean|null    $throw
- * 
+ *
  * @return array
  */
 function toColor(
-    mixed      $value,
-    ColorSpace $to,
-    ColorSpace $from      = null,
-    array|null $fallback  = null,
-    bool|null  $throw     = null,
+    mixed           $value,
+    ColorSpace      $to,
+    ColorSpace|null $from      = null,
+    array|null      $fallback  = null,
+    bool|null       $throw     = null,
 ) :array {
     $throw   ??= ($fallback === null);
     $from    ??= $to;
