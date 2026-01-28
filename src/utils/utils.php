@@ -428,8 +428,8 @@ function hexToDec(
  * @return boolean
  */
 function isColorString(
-    mixed                               $value,
-    ColorSpace|\Stringable|string|array $spaces = null,
+    mixed                                    $value,
+    ColorSpace|\Stringable|string|array|null $spaces = null,
 ) :bool {
     if (!isStringable($value)) {
         return false;
